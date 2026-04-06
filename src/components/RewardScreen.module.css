@@ -1,0 +1,123 @@
+.container {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 40px 20px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+}
+
+.badge {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 3px solid #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes pop {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+.badgeIcon {
+  font-size: 40px;
+}
+
+.title {
+  font-size: 26px;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.message {
+  font-size: 15px;
+  color: #555;
+  line-height: 1.6;
+  max-width: 300px;
+  margin: 0;
+}
+
+.nextCard {
+  background: #f8f8f8;
+  border-radius: 12px;
+  padding: 14px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  text-align: left;
+  border: 1px solid #eee;
+}
+
+.nextLabel {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #aaa;
+  font-weight: 700;
+}
+
+.nextText {
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+}
+
+.dots {
+  display: flex;
+  gap: 8px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #e0e0e0;
+}
+
+.dotDone {
+  background: #1a1a1a;
+}
+
+.shareBtn {
+  width: 100%;
+  padding: 13px;
+  background: white;
+  color: #1a1a1a;
+  border: 2px solid #ddd;
+  border-radius: 12px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.btnPrimary {
+  width: 100%;
+  padding: 15px;
+  background: #1a1a1a;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.finalMessage {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.finalMessage p {
+  color: #555;
+  font-size: 14px;
+  margin: 0;
+}

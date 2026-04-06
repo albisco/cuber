@@ -1,0 +1,184 @@
+.container {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.regressionBanner {
+  background: #fff8e1;
+  border: 1px solid #ffe082;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #7a5c00;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.regressionFix {
+  background: none;
+  border: 1px solid #e6c200;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #7a5c00;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.stageChip {
+  display: inline-block;
+  background: #f0f0f0;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  align-self: flex-start;
+}
+
+.cubeLoader {
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  font-size: 14px;
+}
+
+.moveSequence {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.moveChip {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  background: #f0f0f0;
+  color: #999;
+  font-family: monospace;
+}
+
+.moveChipActive {
+  background: #1a1a1a;
+  color: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.moveChipDone {
+  background: #e8f5e9;
+  color: #388e3c;
+}
+
+.card {
+  background: #f8f8f8;
+  border-radius: 12px;
+  padding: 14px 16px;
+  border: 1px solid #eee;
+}
+
+.cardLabel {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #aaa;
+  margin-bottom: 6px;
+}
+
+.cardText {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.currentMove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  background: #1a1a1a;
+  border-radius: 12px;
+  color: white;
+}
+
+.moveName {
+  font-size: 32px;
+  font-weight: 900;
+  font-family: monospace;
+}
+
+.moveInstruction {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+  background: #f0f0f0;
+  border-radius: 10px;
+  padding: 10px 16px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.replayBtn {
+  background: none;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 13px;
+  color: #888;
+  cursor: pointer;
+  align-self: center;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btnPrimary {
+  flex: 1;
+  padding: 14px;
+  background: #1a1a1a;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btnSecondary {
+  padding: 14px 16px;
+  background: white;
+  color: #1a1a1a;
+  border: 2px solid #ddd;
+  border-radius: 12px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.hint {
+  text-align: center;
+  font-size: 12px;
+  color: #aaa;
+  margin: 0;
+}
+
+.noop {
+  text-align: center;
+  font-size: 16px;
+  color: #555;
+}
