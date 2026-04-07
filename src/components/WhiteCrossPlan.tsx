@@ -15,20 +15,33 @@ function ordinal(n: number): string {
   return ORDINALS[n] ?? `Step ${n}`;
 }
 
+// Simple top-down view of a solved white cross. The 5 cross cells are white,
+// the corners are dark grey to make the cross shape obvious. Replaces the
+// earlier "[visual placeholder]" string with a real, recognisable target.
+const CROSS_PATTERN: Array<'W' | null> = [
+  null, 'W', null,
+  'W',  'W', 'W',
+  null, 'W', null,
+];
+
+function CrossVisual({ alt }: { alt: string }) {
+  return (
+    <div className={styles.crossVisual} role="img" aria-label={alt}>
+      {CROSS_PATTERN.map((c, i) => (
+        <div key={i} className={styles.crossCell} data-color={c ?? ''} />
+      ))}
+    </div>
+  );
+}
+
 export default function WhiteCrossPlan({ plan, onDone }: Props) {
   return (
     <div className={styles.container}>
       <div className={styles.stageChip}>White Cross</div>
 
-      <p className={styles.cardText}>{plan.intro.goalText}</p>
+      <p className={styles.intro}>{plan.intro.goalText}</p>
 
-      <div
-        className={styles.cubeLoader}
-        role="img"
-        aria-label={plan.intro.visualAlt}
-      >
-        [visual placeholder: {plan.intro.visualAsset}]
-      </div>
+      <CrossVisual alt={plan.intro.visualAlt} />
 
       {plan.steps.length === 0 ? (
         <div className={styles.card}>
@@ -39,31 +52,27 @@ export default function WhiteCrossPlan({ plan, onDone }: Props) {
           </p>
         </div>
       ) : (
-        <ol style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <ol className={styles.stepList}>
           {plan.steps.map((step) => (
             <li key={step.stepNumber} className={styles.card}>
               <div className={styles.cardLabel}>
                 {ordinal(step.stepNumber)} step — {step.targetCubie}
               </div>
-              <p className={styles.cardText}>
+              <p className={`${styles.cardText} ${styles.stepNow}`}>
                 <strong>Right now:</strong> {step.currentState}.
               </p>
-              <p className={styles.cardText}>{step.movePlain}.</p>
+              <p className={`${styles.cardText} ${styles.stepMove}`}>
+                {step.movePlain}.
+              </p>
               {step.moveNotation && (
-                <details style={{ fontSize: 13, marginTop: 4 }}>
-                  <summary style={{ cursor: 'pointer', color: '#666' }}>Show notation</summary>
-                  <code style={{ display: 'inline-block', marginTop: 4, padding: '2px 6px', background: '#f0f0f0', borderRadius: 4 }}>
-                    {step.moveNotation}
-                  </code>
+                <details className={styles.notation}>
+                  <summary>Show notation</summary>
+                  <code>{step.moveNotation}</code>
                 </details>
               )}
-              <p className={styles.cardText} style={{ fontStyle: 'italic', color: '#555' }}>
-                {step.progressNote}
-              </p>
+              <p className={styles.stepNote}>{step.progressNote}</p>
               {step.breaksWarning && (
-                <p className={styles.cardText} style={{ color: '#7a5c00', background: '#fff8e1', padding: '6px 10px', borderRadius: 6, marginTop: 6 }}>
-                  ⚠ {step.breaksWarning}
-                </p>
+                <p className={styles.breaksWarn}>⚠ {step.breaksWarning}</p>
               )}
             </li>
           ))}

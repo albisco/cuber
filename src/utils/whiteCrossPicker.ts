@@ -14,6 +14,7 @@ import {
   diagnoseWhiteCrossEdges,
   type WhiteCrossEdgeCase,
 } from './whiteCrossDiagnosis';
+import { findInsertionSequence, formatMoves } from './whiteCrossResolver';
 
 // Coaching priority: easier / safer cases first.
 // 1. bottom-white-down       — the easy win, builds confidence
@@ -59,10 +60,19 @@ export function pickWhiteCrossPlan(state: CubeState): StagePlan {
       return a.target.slot.localeCompare(b.target.slot);
     });
 
-  const steps: CoachingStep[] = remaining.map((diag, i) => ({
-    stepNumber: i + 1,
-    ...whiteCrossStepFromDiagnosis(diag),
-  }));
+  const steps: CoachingStep[] = remaining.map((diag, i) => {
+    const base = whiteCrossStepFromDiagnosis(diag);
+    // Resolve real notation by simulating the cube state. The hand-crafted
+    // movePlain stays — BFS gives us the exact moves, the template gives us
+    // the kid-friendly description.
+    const seq = findInsertionSequence(state, diag, 6);
+    const moveNotation = seq && seq.length > 0 ? formatMoves(seq) : base.moveNotation;
+    return {
+      stepNumber: i + 1,
+      ...base,
+      moveNotation,
+    };
+  });
 
   return {
     intro: WHITE_CROSS_INTRO,

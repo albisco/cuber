@@ -182,3 +182,81 @@
   font-size: 16px;
   color: #555;
 }
+
+/* WhiteCrossPlan ----------------------------------------------------- */
+
+.intro {
+  font-size: 15px;
+  line-height: 1.45;
+  color: #333;
+  margin: 0 0 4px;
+}
+
+.crossVisual {
+  display: grid;
+  grid-template-columns: repeat(3, 32px);
+  grid-template-rows: repeat(3, 32px);
+  gap: 3px;
+  justify-content: center;
+  margin: 12px auto 4px;
+  padding: 8px;
+  background: #f6f6f6;
+  border-radius: 8px;
+  width: fit-content;
+}
+.crossCell {
+  background: #ddd;
+  border-radius: 3px;
+}
+.crossCell[data-color='W'] { background: #fff; border: 1px solid #ccc; }
+.crossCell[data-color='G'] { background: #2ecc71; }
+.crossCell[data-color='R'] { background: #e74c3c; }
+.crossCell[data-color='B'] { background: #3498db; }
+.crossCell[data-color='O'] { background: #e67e22; }
+
+.stepList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.stepNow {
+  margin: 0 0 8px;
+}
+.stepMove {
+  margin: 0 0 10px;
+  font-weight: 500;
+}
+.stepNote {
+  margin: 6px 0 0;
+  font-style: italic;
+  color: #555;
+  font-size: 13px;
+}
+.notation {
+  font-size: 13px;
+  margin-top: 4px;
+}
+.notation summary {
+  cursor: pointer;
+  color: #666;
+  list-style: none;
+}
+.notation code {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 3px 8px;
+  background: #f0f0f0;
+  border-radius: 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.breaksWarn {
+  margin: 8px 0 0;
+  padding: 8px 10px;
+  color: #7a5c00;
+  background: #fff8e1;
+  border-radius: 6px;
+  font-size: 13px;
+}
