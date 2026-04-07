@@ -4,6 +4,7 @@ import type { Stage } from '../types/cube';
 import { STAGE_LABELS } from '../types/cube';
 import { getCoachingResult } from '../utils/coachingEngine';
 import { diagnoseWhiteCross } from '../utils/stageCompletion';
+import WhiteCrossPlan from './WhiteCrossPlan';
 import styles from './CoachScreen.module.css';
 
 // Lazy-load Three.js — only downloads when this screen is reached
@@ -58,6 +59,11 @@ export default function CoachScreen({ cubeState, expectedStage, onDone, onStageC
   if (result.stageComplete) {
     onStageComplete();
     return null;
+  }
+
+  // White cross uses the new templated StagePlan flow.
+  if (result.stagePlan) {
+    return <WhiteCrossPlan plan={result.stagePlan} onDone={onDone} />;
   }
 
   if (!algorithm) {
