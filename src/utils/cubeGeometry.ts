@@ -75,6 +75,37 @@ export const ALL_EDGE_SLOTS: EdgeSlot[] = [
   'DF', 'DB', 'DL', 'DR',
 ];
 
+// 8 corner slots, each touching 3 faces. Verified against the face-view
+// conventions documented at the top of this file.
+export type CornerSlot =
+  | 'UFL' | 'UFR' | 'UBL' | 'UBR'
+  | 'DFL' | 'DFR' | 'DBL' | 'DBR';
+
+export const CORNER_SLOTS: Record<CornerSlot, [StickerPos, StickerPos, StickerPos]> = {
+  UFL: [{ face: FACE.U, index: 6 }, { face: FACE.F, index: 0 }, { face: FACE.L, index: 2 }],
+  UFR: [{ face: FACE.U, index: 8 }, { face: FACE.F, index: 2 }, { face: FACE.R, index: 0 }],
+  UBL: [{ face: FACE.U, index: 0 }, { face: FACE.B, index: 2 }, { face: FACE.L, index: 0 }],
+  UBR: [{ face: FACE.U, index: 2 }, { face: FACE.B, index: 0 }, { face: FACE.R, index: 2 }],
+  DFL: [{ face: FACE.D, index: 0 }, { face: FACE.F, index: 6 }, { face: FACE.L, index: 8 }],
+  DFR: [{ face: FACE.D, index: 2 }, { face: FACE.F, index: 8 }, { face: FACE.R, index: 6 }],
+  DBL: [{ face: FACE.D, index: 6 }, { face: FACE.B, index: 8 }, { face: FACE.L, index: 6 }],
+  DBR: [{ face: FACE.D, index: 8 }, { face: FACE.B, index: 6 }, { face: FACE.R, index: 8 }],
+};
+
+export const ALL_CORNER_SLOTS: CornerSlot[] = [
+  'UFL', 'UFR', 'UBL', 'UBR',
+  'DFL', 'DFR', 'DBL', 'DBR',
+];
+
+export function readCorner(state: CubeState, slot: CornerSlot): [Color, Color, Color] {
+  const [a, b, c] = CORNER_SLOTS[slot];
+  return [
+    state.faces[a.face][a.index],
+    state.faces[b.face][b.index],
+    state.faces[c.face][c.index],
+  ];
+}
+
 // Read the two sticker colours at an edge slot.
 export function readEdge(state: CubeState, slot: EdgeSlot): [Color, Color] {
   const [a, b] = EDGE_SLOTS[slot];

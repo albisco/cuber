@@ -84,13 +84,17 @@ export function getCoachingResult(
   const regression = currentIdx < expectedIdx;
 
   // White cross goes through the templated StagePlan engine.
+  // We only reach this branch when getCurrentStage says the cross isn't
+  // solved, so stageComplete is always false here. An empty stagePlan
+  // means the diagnoser threw on a malformed cube — WhiteCrossPlan renders
+  // its "Hmm, something looks off" UI in that case.
   if (currentStage === 'white-cross') {
     const stagePlan = pickWhiteCrossPlan(state);
     return {
       stage: currentStage,
       algorithm: null,
       stagePlan,
-      stageComplete: stagePlan.steps.length === 0,
+      stageComplete: false,
       regression,
       previousStage: regression ? expectedStage : undefined,
     };
