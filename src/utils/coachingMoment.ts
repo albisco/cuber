@@ -105,56 +105,56 @@ export function whiteCrossStepFromDiagnosis(
       return {
         targetCubie: cubie,
         currentState: 'in the bottom row, white facing down',
-        movePlain: `spin the bottom until the edge is under the ${face.plain} side, then turn the ${face.plain} face twice`,
+        movePlain: `Spin the bottom until the edge is under the ${face.plain} side, then turn the ${face.plain} face twice`,
         moveNotation: `D… ${face.notation}2`,
-        progressNote: "white's already facing the right way — one flip and it's home.",
+        progressNote: "White's already facing the right way — one flip and it's home.",
       };
 
     case 'bottom-white-side':
       return {
         targetCubie: cubie,
         currentState: 'in the bottom row, white on a side',
-        movePlain: `twist the bottom until the edge is next to the ${face.plain} side, then roll it up so white's on top`,
-        moveNotation: '[resolved by picker]',
-        progressNote: 'white has to point up for the cross, so we roll it up from the bottom.',
+        movePlain: `Twist the bottom until the edge is next to the ${face.plain} side, then roll it up so white's on top`,
+        moveNotation: '',
+        progressNote: 'White has to point up for the cross, so we roll it up from the bottom.',
       };
 
     case 'middle-layer':
       return {
         targetCubie: cubie,
         currentState: `stuck in the middle row (${diag.currentSlot})`,
-        movePlain: 'pop it down to the bottom row, then bring it home from there',
-        moveNotation: '[resolved by picker]',
-        progressNote: "no clean lift from the middle — the bottom row has one.",
+        movePlain: 'Pop it down to the bottom row, then bring it home from there',
+        moveNotation: '',
+        progressNote: "No clean lift from the middle — the bottom row has one.",
       };
 
     case 'top-correct-slot-flipped':
       return {
         targetCubie: cubie,
         currentState: 'right spot on top, but flipped — white on the side',
-        movePlain: `send it down to the bottom, then bring it back up to the ${face.plain} side the right way`,
-        moveNotation: '[resolved by picker]',
-        progressNote: 'the only way to flip an edge is through the bottom row.',
+        movePlain: `Send it down to the bottom, then bring it back up to the ${face.plain} side the right way`,
+        moveNotation: '',
+        progressNote: 'The only way to flip an edge is through the bottom row.',
       };
 
     case 'top-wrong-slot-up':
       return {
         targetCubie: cubie,
         currentState: `on top, white up, wrong spot (${diag.currentSlot})`,
-        movePlain: `drop it down to the bottom, spin under the ${face.plain} side, then turn ${face.plain} twice`,
-        moveNotation: '[resolved by picker]',
-        progressNote: 'going through the bottom is cleaner than sliding it across the top.',
-        breaksWarning: "may bump another white edge — we'll fix it next.",
+        movePlain: `Drop it down to the bottom, spin under the ${face.plain} side, then turn ${face.plain} twice`,
+        moveNotation: '',
+        progressNote: 'Going through the bottom is cleaner than sliding it across the top.',
+        breaksWarning: "May bump another white edge — we'll fix it next.",
       };
 
     case 'top-wrong-slot-flipped':
       return {
         targetCubie: cubie,
         currentState: `on top, wrong spot (${diag.currentSlot}), white on a side`,
-        movePlain: `drop it to the bottom, then bring it back up to the ${face.plain} side the right way`,
-        moveNotation: '[resolved by picker]',
-        progressNote: 'fixes the spot and the flip in one trip.',
-        breaksWarning: "may bump another white edge — we'll fix it next.",
+        movePlain: `Drop it to the bottom, then bring it back up to the ${face.plain} side the right way`,
+        moveNotation: '',
+        progressNote: 'Fixes the spot and the flip in one trip.',
+        breaksWarning: "May bump another white edge — we'll fix it next.",
       };
   }
 }

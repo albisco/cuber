@@ -49,12 +49,14 @@ export default function WhiteCrossPlan({ plan, onDone }: Props) {
                 <strong>Right now:</strong> {step.currentState}.
               </p>
               <p className={styles.cardText}>{step.movePlain}.</p>
-              <details style={{ fontSize: 13, marginTop: 4 }}>
-                <summary style={{ cursor: 'pointer', color: '#666' }}>Show notation</summary>
-                <code style={{ display: 'inline-block', marginTop: 4, padding: '2px 6px', background: '#f0f0f0', borderRadius: 4 }}>
-                  {step.moveNotation}
-                </code>
-              </details>
+              {step.moveNotation && (
+                <details style={{ fontSize: 13, marginTop: 4 }}>
+                  <summary style={{ cursor: 'pointer', color: '#666' }}>Show notation</summary>
+                  <code style={{ display: 'inline-block', marginTop: 4, padding: '2px 6px', background: '#f0f0f0', borderRadius: 4 }}>
+                    {step.moveNotation}
+                  </code>
+                </details>
+              )}
               <p className={styles.cardText} style={{ fontStyle: 'italic', color: '#555' }}>
                 {step.progressNote}
               </p>
