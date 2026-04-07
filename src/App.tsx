@@ -6,6 +6,12 @@ import RewardScreen from './components/RewardScreen';
 import type { CubeState } from './types/cube';
 import './App.css';
 
+// Dev-only: expose the live store on window so we can inspect cubeState
+// (which is in-memory only, not persisted) from devtools.
+if (import.meta.env.DEV) {
+  (window as unknown as { __cuberStore?: typeof useAppStore }).__cuberStore = useAppStore;
+}
+
 export default function App() {
   const {
     screen, setScreen,
