@@ -13,7 +13,7 @@ interface Progress {
 interface AppState {
   cubeState: CubeState | null;
   progress: Progress;
-  screen: 'home' | 'input' | 'coach' | 'reward';
+  screen: 'home' | 'input-method' | 'input' | 'camera' | 'coach' | 'reward';
 
   // Actions
   setCubeState: (state: CubeState) => void;

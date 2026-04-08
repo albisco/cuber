@@ -10,6 +10,11 @@ export type Face = [Color, Color, Color, Color, Color, Color, Color, Color, Colo
 export const FACE = { U: 0, D: 1, F: 2, B: 3, R: 4, L: 5 } as const;
 export type FaceName = keyof typeof FACE;
 
+// Face centre colors (fixed, never move)
+export const FACE_CENTRES: Record<FaceName, Color> = {
+  U: 'W', D: 'Y', F: 'G', B: 'B', R: 'R', L: 'O',
+};
+
 // CubeState: 6 faces × 9 stickers = 54 colors
 export interface CubeState {
   faces: [Face, Face, Face, Face, Face, Face];
