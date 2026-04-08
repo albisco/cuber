@@ -98,20 +98,28 @@ export default function CameraScanner({ onCapture, onCancel, faceName }: Props) 
   const mirrorCols = MIRROR_COLS.has(faceName);
 
   useEffect(() => {
+    let mounted = true;
     async function initCamera() {
       try {
         const mediaStream = await navigator.mediaDevices.getUserMedia({
           video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
         });
+        if (!mounted) {
+          mediaStream.getTracks().forEach(t => t.stop());
+          return;
+        }
         streamRef.current = mediaStream;
         if (videoRef.current) videoRef.current.srcObject = mediaStream;
-      } catch (err) { setError('Could not access camera.'); }
+      } catch (err) { 
+        if (mounted) setError('Could not access camera.'); 
+      }
     }
     initCamera();
     return () => {
+      mounted = false;
       streamRef.current?.getTracks().forEach(track => track.stop());
     };
-  }, [faceName]);
+  }, []);
 
   const captureFrame = useCallback(() => {
     if (!videoRef.current || !canvasRef.current) return;
