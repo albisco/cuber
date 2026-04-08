@@ -72,11 +72,11 @@ interface Props {
   onCancel: () => void;
 }
 
-function BorderChip({ face }: { face: FaceName }) {
+function BorderChip({ face, orientation = 'h' }: { face: FaceName; orientation?: 'h' | 'v' }) {
   const color = FACE_CENTRES[face];
   return (
     <div
-      className={`${css.borderChip} ${color === 'W' ? css.borderChipWhite : ''}`}
+      className={`${css.borderChip} ${orientation === 'v' ? css.borderChipV : ''} ${color === 'W' ? css.borderChipWhite : ''}`}
       style={{ backgroundColor: COLOR_HEX[color] }}
       title={COLOR_LABELS[color]}
     >
@@ -219,10 +219,10 @@ export default function CameraFlow({ onComplete, onCancel }: Props) {
               <div className={styles.frameCornerTL} /><div className={styles.frameCornerTR} />
               <div className={styles.frameCornerBL} /><div className={styles.frameCornerBR} />
             </div>
-            <div className={styles.captureBorderTop}><BorderChip face={borders.top} /></div>
-            <div className={styles.captureBorderLeft}><BorderChip face={borders.left} /></div>
-            <div className={styles.captureBorderRight}><BorderChip face={borders.right} /></div>
-            <div className={styles.captureBorderBottom}><BorderChip face={borders.bottom} /></div>
+            <div className={styles.captureBorderTop}><BorderChip face={borders.top} orientation="h" /></div>
+            <div className={styles.captureBorderLeft}><BorderChip face={borders.left} orientation="v" /></div>
+            <div className={styles.captureBorderRight}><BorderChip face={borders.right} orientation="v" /></div>
+            <div className={styles.captureBorderBottom}><BorderChip face={borders.bottom} orientation="h" /></div>
           </div>
           {error && <p className={styles.error}>{error}</p>}
           <button className={styles.captureBtn} onClick={captureFrame}>📸 Capture Face</button>
@@ -233,11 +233,11 @@ export default function CameraFlow({ onComplete, onCancel }: Props) {
           
           <div className={styles.gridWrapper}>
             <div className={styles.borderRow}>
-              <BorderChip face={borders.top} />
+              <BorderChip face={borders.top} orientation="h" />
             </div>
             <div className={styles.gridMiddle}>
               <div className={styles.borderCol}>
-                <BorderChip face={borders.left} />
+                <BorderChip face={borders.left} orientation="v" />
               </div>
               <div className={styles.resultGrid}>
                 {Array.from({ length: 9 }, (_, visualIdx) => {
@@ -259,11 +259,11 @@ export default function CameraFlow({ onComplete, onCancel }: Props) {
                 })}
               </div>
               <div className={styles.borderCol}>
-                <BorderChip face={borders.right} />
+                <BorderChip face={borders.right} orientation="v" />
               </div>
             </div>
             <div className={styles.borderRow}>
-              <BorderChip face={borders.bottom} />
+              <BorderChip face={borders.bottom} orientation="h" />
             </div>
           </div>
 
