@@ -7,6 +7,12 @@ const COLOR_HEX: Record<Color | 'blank', string> = {
   W: '#ffffff', Y: '#f5d800', G: '#009b48', B: '#0046ad', R: '#b90000', O: '#ff5800', blank: '#d0d0d0',
 };
 
+const COLOR_LABELS: Record<Color, string> = {
+  W: 'White', Y: 'Yellow', G: 'Green', B: 'Blue', R: 'Red', O: 'Orange',
+};
+
+const COLORS: Color[] = ['W', 'Y', 'G', 'B', 'R', 'O'];
+
 const FACE_NAMES: Record<FaceName, string> = {
   U: 'White — Top', D: 'Yellow — Bottom', F: 'Green — Front', B: 'Blue — Back', R: 'Red — Right', L: 'Orange — Left',
 };
@@ -19,6 +25,17 @@ const FACE_TIPS: Record<FaceName, string> = {
   R: 'Tilt the cube so red faces you. Green (front) will be on your LEFT, Blue (back) on your RIGHT.',
   L: 'Tilt the cube so orange faces you. Blue (back) will be on your LEFT, Green (front) on your RIGHT.',
 };
+
+const GRID_BORDERS: Record<FaceName, { top: FaceName; bottom: FaceName; left: FaceName; right: FaceName }> = {
+  U: { top: 'B', bottom: 'F', left: 'L', right: 'R' },
+  D: { top: 'F', bottom: 'B', left: 'L', right: 'R' },
+  F: { top: 'U', bottom: 'D', left: 'L', right: 'R' },
+  B: { top: 'U', bottom: 'D', left: 'R', right: 'L' },
+  R: { top: 'U', bottom: 'D', left: 'F', right: 'B' },
+  L: { top: 'U', bottom: 'D', left: 'B', right: 'F' },
+};
+
+const MIRROR_COLS = new Set<FaceName>(['R', 'L']);
 
 function getDominantColor(imageData: ImageData, x: number, y: number): Color | null {
   const idx = (y * imageData.width + x) * 4;
@@ -55,6 +72,19 @@ interface Props {
   faceName: FaceName;
 }
 
+function BorderChip({ face }: { face: FaceName }) {
+  const color = FACE_CENTRES[face];
+  return (
+    <div
+      className={`${styles.borderChip} ${color === 'W' ? styles.borderChipWhite : ''}`}
+      style={{ backgroundColor: COLOR_HEX[color] }}
+      title={COLOR_LABELS[color]}
+    >
+      {COLOR_LABELS[color][0]}
+    </div>
+  );
+}
+
 export default function CameraScanner({ onCapture, onCancel, faceName }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -62,20 +92,25 @@ export default function CameraScanner({ onCapture, onCancel, faceName }: Props) 
   const [error, setError] = useState<string | null>(null);
   const [detectedColors, setDetectedColors] = useState<(Color | null)[]>(Array(9).fill(null));
   const [showResult, setShowResult] = useState(false);
+  const [selectedEditIdx, setSelectedEditIdx] = useState<number | null>(null);
+
+  const borders = GRID_BORDERS[faceName];
+  const mirrorCols = MIRROR_COLS.has(faceName);
+
+  const initCamera = useCallback(async () => {
+    try {
+      const mediaStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
+      });
+      setStream(mediaStream);
+      if (videoRef.current) videoRef.current.srcObject = mediaStream;
+    } catch (err) { setError('Could not access camera.'); }
+  }, []);
 
   useEffect(() => {
-    async function initCamera() {
-      try {
-        const mediaStream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
-        });
-        setStream(mediaStream);
-        if (videoRef.current) videoRef.current.srcObject = mediaStream;
-      } catch (err) { setError('Could not access camera.'); }
-    }
     initCamera();
     return () => { stream?.getTracks().forEach(track => track.stop()); };
-  }, []);
+  }, [initCamera, stream]);
 
   const captureFrame = useCallback(() => {
     if (!videoRef.current || !canvasRef.current) return;
@@ -109,8 +144,26 @@ export default function CameraScanner({ onCapture, onCancel, faceName }: Props) 
     setShowResult(true);
   }, [faceName]);
 
+  const handleRetake = useCallback(() => {
+    setDetectedColors(Array(9).fill(null));
+    setShowResult(false);
+    setSelectedEditIdx(null);
+  }, []);
+
+  const handleStickerClick = (idx: number) => {
+    if (idx === 4) return; // Can't edit centre
+    setSelectedEditIdx(idx);
+  };
+
+  const handleColorSelect = (color: Color) => {
+    if (selectedEditIdx === null) return;
+    const newColors = [...detectedColors];
+    newColors[selectedEditIdx] = color;
+    setDetectedColors(newColors);
+    setSelectedEditIdx(null);
+  };
+
   const handleConfirm = () => onCapture(detectedColors);
-  const handleRetake = () => { setDetectedColors(Array(9).fill(null)); setShowResult(false); };
 
   return (
     <div className={styles.container}>
@@ -135,15 +188,62 @@ export default function CameraScanner({ onCapture, onCancel, faceName }: Props) 
         </>
       ) : (
         <div className={styles.resultView}>
-          <p className={styles.resultLabel}>Detected colors:</p>
-          <div className={styles.resultGrid}>
-            {detectedColors.map((color, idx) => (
-              <div key={idx} className={`${styles.resultSticker} ${idx === 4 ? styles.resultCenter : ''}`}
-                style={{ backgroundColor: color ? COLOR_HEX[color] : COLOR_HEX.blank }}>
-                {color || '?'}
+          <p className={styles.resultLabel}>Detected colors — tap to change:</p>
+          
+          <div className={styles.gridWrapper}>
+            <div className={styles.borderRow}>
+              <BorderChip face={borders.top} />
+            </div>
+            <div className={styles.gridMiddle}>
+              <div className={styles.borderCol}>
+                <BorderChip face={borders.left} />
               </div>
-            ))}
+              <div className={styles.resultGrid}>
+                {Array.from({ length: 9 }, (_, visualIdx) => {
+                  const row = Math.floor(visualIdx / 3);
+                  const col = visualIdx % 3;
+                  const storageIdx = mirrorCols ? row * 3 + (2 - col) : visualIdx;
+                  const color = detectedColors[storageIdx];
+                  return (
+                    <button
+                      key={visualIdx}
+                      className={`${styles.resultSticker} ${storageIdx === 4 ? styles.resultCenter : ''} ${selectedEditIdx === storageIdx ? styles.resultStickerSelected : ''} ${color === 'W' ? styles.resultWhite : ''}`}
+                      style={{ backgroundColor: color ? COLOR_HEX[color] : COLOR_HEX.blank }}
+                      onClick={() => handleStickerClick(storageIdx)}
+                      disabled={storageIdx === 4}
+                    >
+                      {color ? COLOR_LABELS[color][0] : '?'}
+                    </button>
+                  );
+                })}
+              </div>
+              <div className={styles.borderCol}>
+                <BorderChip face={borders.right} />
+              </div>
+            </div>
+            <div className={styles.borderRow}>
+              <BorderChip face={borders.bottom} />
+            </div>
           </div>
+
+          {selectedEditIdx !== null && (
+            <div className={styles.colorPicker}>
+              {COLORS.map(color => (
+                <button
+                  key={color}
+                  className={`${styles.colorBtn} ${color === 'W' ? styles.colorBtnWhite : ''}`}
+                  style={{ backgroundColor: COLOR_HEX[color] }}
+                  onClick={() => handleColorSelect(color)}
+                >
+                  {COLOR_LABELS[color]}
+                </button>
+              ))}
+              <button className={styles.colorBtnClear} onClick={() => { const newColors = [...detectedColors]; newColors[selectedEditIdx] = null; setDetectedColors(newColors); setSelectedEditIdx(null); }}>
+                Clear
+              </button>
+            </div>
+          )}
+
           <div className={styles.resultActions}>
             <button className={styles.retakeBtn} onClick={handleRetake}>Retake</button>
             <button className={styles.confirmBtn} onClick={handleConfirm}>Confirm</button>

@@ -131,25 +131,77 @@
   margin-bottom: 12px;
 }
 
-.resultGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  width: 240px;
-  margin-bottom: 20px;
+.gridWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 16px;
 }
 
-.resultSticker {
-  width: 72px;
-  height: 72px;
-  border-radius: 8px;
+.borderRow {
+  display: flex;
+  justify-content: center;
+  padding: 4px 0;
+}
+
+.borderCol {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 4px;
+}
+
+.borderChip {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.75rem;
-  font-weight: 600;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #333;
+  border: 1px solid rgba(0,0,0,0.15);
+}
+
+.borderChipWhite {
+  border-color: #999;
+}
+
+.gridMiddle {
+  display: flex;
+  flex-direction: row;
+}
+
+.resultGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.resultSticker {
+  width: 64px;
+  height: 64px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
   color: #333;
   border: 2px solid #ddd;
+  background: #d0d0d0;
+  cursor: pointer;
+}
+
+.resultSticker:disabled {
+  cursor: default;
+}
+
+.resultStickerSelected {
+  border-color: #4a90d9;
+  border-width: 3px;
+  box-shadow: 0 0 8px rgba(74, 144, 217, 0.4);
 }
 
 .resultSticker.resultWhite {
@@ -161,10 +213,50 @@
   border-width: 3px;
 }
 
+.colorPicker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 16px;
+  padding: 12px;
+  background: white;
+  border-radius: 12px;
+  max-width: 320px;
+}
+
+.colorBtn {
+  width: 56px;
+  height: 40px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #333;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.colorBtnWhite {
+  border-color: #999;
+}
+
+.colorBtnClear {
+  padding: 8px 12px;
+  font-size: 0.75rem;
+  background: #e0e0e0;
+  color: #333;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
 .resultActions {
   display: flex;
   gap: 12px;
-  margin-bottom: 20px;
+  margin-top: 16px;
 }
 
 .retakeBtn {
@@ -195,4 +287,5 @@
   border: 1px solid #ccc;
   border-radius: 8px;
   cursor: pointer;
+  margin-top: 16px;
 }
