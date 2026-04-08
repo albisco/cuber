@@ -88,7 +88,7 @@ function BorderChip({ face }: { face: FaceName }) {
 export default function CameraScanner({ onCapture, onCancel, faceName }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [stream, setStream] = useState<MediaStream | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [detectedColors, setDetectedColors] = useState<(Color | null)[]>(Array(9).fill(null));
   const [showResult, setShowResult] = useState(false);
@@ -97,20 +97,21 @@ export default function CameraScanner({ onCapture, onCancel, faceName }: Props) 
   const borders = GRID_BORDERS[faceName];
   const mirrorCols = MIRROR_COLS.has(faceName);
 
-  const initCamera = useCallback(async () => {
-    try {
-      const mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
-      });
-      setStream(mediaStream);
-      if (videoRef.current) videoRef.current.srcObject = mediaStream;
-    } catch (err) { setError('Could not access camera.'); }
-  }, []);
-
   useEffect(() => {
+    async function initCamera() {
+      try {
+        const mediaStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
+        });
+        streamRef.current = mediaStream;
+        if (videoRef.current) videoRef.current.srcObject = mediaStream;
+      } catch (err) { setError('Could not access camera.'); }
+    }
     initCamera();
-    return () => { stream?.getTracks().forEach(track => track.stop()); };
-  }, [initCamera, stream]);
+    return () => {
+      streamRef.current?.getTracks().forEach(track => track.stop());
+    };
+  }, [faceName]);
 
   const captureFrame = useCallback(() => {
     if (!videoRef.current || !canvasRef.current) return;
@@ -182,6 +183,10 @@ export default function CameraScanner({ onCapture, onCancel, faceName }: Props) 
               <div className={styles.frameCornerTL} /><div className={styles.frameCornerTR} />
               <div className={styles.frameCornerBL} /><div className={styles.frameCornerBR} />
             </div>
+            <div className={styles.captureBorderTop}><BorderChip face={borders.top} /></div>
+            <div className={styles.captureBorderLeft}><BorderChip face={borders.left} /></div>
+            <div className={styles.captureBorderRight}><BorderChip face={borders.right} /></div>
+            <div className={styles.captureBorderBottom}><BorderChip face={borders.bottom} /></div>
           </div>
           {error && <p className={styles.error}>{error}</p>}
           <button className={styles.captureBtn} onClick={captureFrame}>📸 Capture Face</button>

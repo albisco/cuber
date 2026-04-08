@@ -98,6 +98,41 @@
 .frameCornerBL { bottom: 0; left: 0; border-bottom-width: 4px; border-left-width: 4px; border-bottom-left-radius: 8px; }
 .frameCornerBR { bottom: 0; right: 0; border-bottom-width: 4px; border-right-width: 4px; border-bottom-right-radius: 8px; }
 
+.captureBorderTop,
+.captureBorderBottom,
+.captureBorderLeft,
+.captureBorderRight {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.captureBorderTop {
+  top: 2%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.captureBorderBottom {
+  bottom: 2%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.captureBorderLeft {
+  left: 2%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.captureBorderRight {
+  right: 2%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 .captureBtn {
   padding: 16px 32px;
   font-size: 1.1rem;
