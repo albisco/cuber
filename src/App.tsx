@@ -1,10 +1,18 @@
 import { useAppStore } from './store/appStore';
 import HomeScreen from './components/HomeScreen';
+import InputMethod from './components/InputMethod';
 import ManualInput from './components/ManualInput';
+import CameraFlow from './components/CameraFlow';
 import CoachScreen from './components/CoachScreen';
 import RewardScreen from './components/RewardScreen';
 import type { CubeState } from './types/cube';
 import './App.css';
+
+// Dev-only: expose the live store on window so we can inspect cubeState
+// (which is in-memory only, not persisted) from devtools.
+if (import.meta.env.DEV) {
+  (window as unknown as { __cuberStore?: typeof useAppStore }).__cuberStore = useAppStore;
+}
 
 export default function App() {
   const {
@@ -20,7 +28,7 @@ export default function App() {
   };
 
   const handleReScan = () => {
-    setScreen('input');
+    setScreen('input-method');
   };
 
   const handleStageComplete = () => {
@@ -36,8 +44,16 @@ export default function App() {
         <HomeScreen
           completedStages={progress.completedStages}
           currentStage={progress.currentStage}
-          onStart={() => setScreen('input')}
+          onStart={() => setScreen('input-method')}
           onUndoStage={undoLastStage}
+        />
+      )}
+
+      {screen === 'input-method' && (
+        <InputMethod
+          onManual={() => setScreen('input')}
+          onCamera={() => setScreen('camera')}
+          onCancel={() => setScreen('home')}
         />
       )}
 
@@ -45,7 +61,14 @@ export default function App() {
         <ManualInput
           initialState={cubeState ?? undefined}
           onConfirm={handleCubeConfirmed}
-          onCancel={() => setScreen('home')}
+          onCancel={() => setScreen('input-method')}
+        />
+      )}
+
+      {screen === 'camera' && (
+        <CameraFlow
+          onComplete={handleCubeConfirmed}
+          onCancel={() => setScreen('input-method')}
         />
       )}
 

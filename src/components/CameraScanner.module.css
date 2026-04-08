@@ -1,0 +1,326 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+
+.title {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.tip {
+  font-size: 0.9rem;
+  color: #666;
+  text-align: center;
+  margin-bottom: 16px;
+  max-width: 320px;
+  line-height: 1.4;
+}
+
+.videoWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 4/3;
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gridOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.gridLineH1,
+.gridLineH2 {
+  position: absolute;
+  left: 16.67%;
+  right: 16.67%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.gridLineH1 { top: 33.33%; }
+.gridLineH2 { top: 66.66%; }
+
+.gridLineV1,
+.gridLineV2 {
+  position: absolute;
+  top: 16.67%;
+  bottom: 16.67%;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.gridLineV1 { left: 33.33%; }
+.gridLineV2 { left: 66.66%; }
+
+.frameGuide {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  right: 10%;
+  bottom: 10%;
+  pointer-events: none;
+}
+
+.frameCornerTL,
+.frameCornerTR,
+.frameCornerBL,
+.frameCornerBR {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-color: #fff;
+  border-style: solid;
+  border-width: 0;
+}
+
+.frameCornerTL { top: 0; left: 0; border-top-width: 4px; border-left-width: 4px; border-top-left-radius: 8px; }
+.frameCornerTR { top: 0; right: 0; border-top-width: 4px; border-right-width: 4px; border-top-right-radius: 8px; }
+.frameCornerBL { bottom: 0; left: 0; border-bottom-width: 4px; border-left-width: 4px; border-bottom-left-radius: 8px; }
+.frameCornerBR { bottom: 0; right: 0; border-bottom-width: 4px; border-right-width: 4px; border-bottom-right-radius: 8px; }
+
+.captureBorderTop,
+.captureBorderBottom,
+.captureBorderLeft,
+.captureBorderRight {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.captureBorderTop {
+  top: 2%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.captureBorderBottom {
+  bottom: 2%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.captureBorderLeft {
+  left: 2%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.captureBorderRight {
+  right: 2%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.captureBtn {
+  padding: 16px 32px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  background: #4a90d9;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+
+.captureBtn:active {
+  transform: scale(0.98);
+}
+
+.error {
+  color: #d9534f;
+  margin-bottom: 16px;
+}
+
+.resultView {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.resultLabel {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.gridWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.borderRow {
+  display: flex;
+  justify-content: center;
+  padding: 4px 0;
+}
+
+.borderCol {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 4px;
+}
+
+.borderChip {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #333;
+  border: 1px solid rgba(0,0,0,0.15);
+}
+
+.borderChipWhite {
+  border-color: #999;
+}
+
+.gridMiddle {
+  display: flex;
+  flex-direction: row;
+}
+
+.resultGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.resultSticker {
+  width: 64px;
+  height: 64px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #333;
+  border: 2px solid #ddd;
+  background: #d0d0d0;
+  cursor: pointer;
+}
+
+.resultSticker:disabled {
+  cursor: default;
+}
+
+.resultStickerSelected {
+  border-color: #4a90d9;
+  border-width: 3px;
+  box-shadow: 0 0 8px rgba(74, 144, 217, 0.4);
+}
+
+.resultSticker.resultWhite {
+  border-color: #999;
+}
+
+.resultCenter {
+  border-color: #333;
+  border-width: 3px;
+}
+
+.colorPicker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 16px;
+  padding: 12px;
+  background: white;
+  border-radius: 12px;
+  max-width: 320px;
+}
+
+.colorBtn {
+  width: 56px;
+  height: 40px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #333;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.colorBtnWhite {
+  border-color: #999;
+}
+
+.colorBtnClear {
+  padding: 8px 12px;
+  font-size: 0.75rem;
+  background: #e0e0e0;
+  color: #333;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.resultActions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.retakeBtn {
+  padding: 12px 24px;
+  font-size: 1rem;
+  background: #e0e0e0;
+  color: #333;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.confirmBtn {
+  padding: 12px 24px;
+  font-size: 1rem;
+  background: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.cancelBtn {
+  padding: 12px 24px;
+  font-size: 1rem;
+  background: transparent;
+  color: #666;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 16px;
+}

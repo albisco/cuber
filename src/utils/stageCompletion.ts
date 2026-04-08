@@ -1,5 +1,11 @@
-import type { CubeState, Stage, ValidationResult } from '../types/cube';
+import type { CubeState, Color, Stage, ValidationResult } from '../types/cube';
 import { FACE } from '../types/cube';
+import {
+  ALL_EDGE_SLOTS,
+  ALL_CORNER_SLOTS,
+  readEdge,
+  readCorner,
+} from './cubeGeometry';
 
 // Returns a plain-English description of which white cross edge is failing, or null if complete.
 export function diagnoseWhiteCross(state: CubeState): string | null {
@@ -146,5 +152,94 @@ export function validateCubeState(state: CubeState): ValidationResult {
     };
   }
 
+  // Physical-validity check: the 12 edges and 8 corners must form the
+  // canonical set of cubies. Catches malformed states like "9 of each
+  // colour but the stickers don't form a real cube" — which would crash
+  // the white cross diagnoser later.
+  const edgeError = checkEdgesPhysicallyValid(state);
+  if (edgeError) return { valid: false, error: edgeError };
+  const cornerError = checkCornersPhysicallyValid(state);
+  if (cornerError) return { valid: false, error: cornerError };
+
   return { valid: true };
+}
+
+// Opposite-colour pairs on a standard cube. A cubie touching two opposite
+// colours can't physically exist.
+const OPPOSITES: Record<Color, Color> = {
+  W: 'Y', Y: 'W',
+  G: 'B', B: 'G',
+  R: 'O', O: 'R',
+};
+
+function pairKey(a: Color, b: Color): string {
+  return a < b ? `${a}${b}` : `${b}${a}`;
+}
+
+function tripletKey(a: Color, b: Color, c: Color): string {
+  return [a, b, c].sort().join('');
+}
+
+// The 12 valid edge cubies: every (X, Y) where X and Y are not opposite.
+const VALID_EDGE_KEYS: Set<string> = (() => {
+  const colours: Color[] = ['W', 'Y', 'G', 'B', 'R', 'O'];
+  const set = new Set<string>();
+  for (let i = 0; i < colours.length; i++) {
+    for (let j = i + 1; j < colours.length; j++) {
+      if (OPPOSITES[colours[i]] === colours[j]) continue;
+      set.add(pairKey(colours[i], colours[j]));
+    }
+  }
+  return set; // 12 entries
+})();
+
+// The 8 valid corner cubies: pick one from {W,Y}, one from {G,B}, one from {R,O}.
+const VALID_CORNER_KEYS: Set<string> = (() => {
+  const set = new Set<string>();
+  for (const a of ['W', 'Y'] as Color[]) {
+    for (const b of ['G', 'B'] as Color[]) {
+      for (const c of ['R', 'O'] as Color[]) {
+        set.add(tripletKey(a, b, c));
+      }
+    }
+  }
+  return set; // 8 entries
+})();
+
+function checkEdgesPhysicallyValid(state: CubeState): string | null {
+  const seen = new Set<string>();
+  for (const slot of ALL_EDGE_SLOTS) {
+    const [a, b] = readEdge(state, slot);
+    if (OPPOSITES[a] === b) {
+      return `The ${slot} edge has two opposite colours (${a} and ${b}) — that can't happen on a real cube. Re-scan that edge.`;
+    }
+    const key = pairKey(a, b);
+    if (!VALID_EDGE_KEYS.has(key)) {
+      return `The ${slot} edge has an unexpected colour pair (${a}/${b}). Re-scan that edge.`;
+    }
+    if (seen.has(key)) {
+      return `Two edges have the same colours (${a}/${b}). Each edge piece is unique — re-check those stickers.`;
+    }
+    seen.add(key);
+  }
+  return null;
+}
+
+function checkCornersPhysicallyValid(state: CubeState): string | null {
+  const seen = new Set<string>();
+  for (const slot of ALL_CORNER_SLOTS) {
+    const [a, b, c] = readCorner(state, slot);
+    if (OPPOSITES[a] === b || OPPOSITES[a] === c || OPPOSITES[b] === c) {
+      return `The ${slot} corner has two opposite colours — that can't happen on a real cube. Re-scan that corner.`;
+    }
+    const key = tripletKey(a, b, c);
+    if (!VALID_CORNER_KEYS.has(key)) {
+      return `The ${slot} corner has an unexpected colour combo (${a}/${b}/${c}). Re-scan that corner.`;
+    }
+    if (seen.has(key)) {
+      return `Two corners have the same colours (${a}/${b}/${c}). Each corner piece is unique — re-check those stickers.`;
+    }
+    seen.add(key);
+  }
+  return null;
 }
