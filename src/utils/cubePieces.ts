@@ -10,7 +10,7 @@
 
 import type { Color, CubeState } from '../types/cube';
 import { FACE } from '../types/cube';
-import { stickerIndex, isOutward } from './cubeGeometry';
+import { stickerIndex } from './cubeGeometry';
 
 // Fixed solved-state color per face, indexed to match FACE order (U D F B R L).
 export const SOLVED_FACE_COLOR: Color[] = ['W', 'Y', 'G', 'B', 'R', 'O'];
